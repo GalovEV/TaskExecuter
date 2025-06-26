@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{7D626D8A-54E3-430C-B183-67D1E39D6DE2}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="TaskExecuter.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dll\FileTasks\FileTasks.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dll\ShelExecuter\ShelExecuter.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TaskExecuter">
+        <MSBuild Projects="TaskExecuter.dproj"/>
+    </Target>
+    <Target Name="TaskExecuter:Clean">
+        <MSBuild Projects="TaskExecuter.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TaskExecuter:Make">
+        <MSBuild Projects="TaskExecuter.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FileTasks">
+        <MSBuild Projects="dll\FileTasks\FileTasks.dproj"/>
+    </Target>
+    <Target Name="FileTasks:Clean">
+        <MSBuild Projects="dll\FileTasks\FileTasks.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FileTasks:Make">
+        <MSBuild Projects="dll\FileTasks\FileTasks.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ShelExecuter">
+        <MSBuild Projects="dll\ShelExecuter\ShelExecuter.dproj"/>
+    </Target>
+    <Target Name="ShelExecuter:Clean">
+        <MSBuild Projects="dll\ShelExecuter\ShelExecuter.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ShelExecuter:Make">
+        <MSBuild Projects="dll\ShelExecuter\ShelExecuter.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TaskExecuter;FileTasks;ShelExecuter"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TaskExecuter:Clean;FileTasks:Clean;ShelExecuter:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TaskExecuter:Make;FileTasks:Make;ShelExecuter:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
