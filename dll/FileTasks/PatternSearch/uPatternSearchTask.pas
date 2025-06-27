@@ -8,7 +8,6 @@ type
   TPatternSearchTask = class(TTaskImplementation)
   private
 
-//    function GetFormResults(Form: TForm): TArray<TParamValue>;
   protected
   function DoExecute(const AParamValues: TArray<TParamValue>; ACallback: ITaskCallback): Boolean; override;
 
@@ -81,11 +80,8 @@ begin
   // Поиск паттернов в  файле
   ACallback.LogMessage(Format('Начало поиска в файле %s', [lFileName]));
 
-//  if not SearchPatternsInFile(Self, Patterns, lFileName, ACallback, lSearchResults) then
   if not FindPatternsInFile(Self, Patterns, lFileName, ACallback, lSearchResults) then
     Exit(False);
-
-//  if FCanceled then Exit(False);
 
   FTaskResult:= '';
   for var Res in lSearchResults do
@@ -96,7 +92,7 @@ begin
     FTaskResult:= FTaskResult + #13;
   end;
   ACallback.UpdateProgress('Поиск завершен', 100, tsCompleted);
-  Sleep(300);
+  Sleep(200);
 
 end;
 

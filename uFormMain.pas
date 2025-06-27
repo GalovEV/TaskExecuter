@@ -289,8 +289,32 @@ begin
 end;
 
 procedure TFormMain.OpenTaskResults(ATaskID: string);
+var
+//  lResultgForm: TForm;
+  lResult: string;
+  Const
+    cMaxLength = 1000;
 begin
-   ShowMessage(FTaskManager.GetTaskResults(ATaskID));
+
+  lResult := FTaskManager.GetTaskResults(ATaskID);
+  if Length(lResult) > cMaxLength then
+    lResult := Copy(lResult, 1, cMaxLength) + '...';
+
+   ShowMessage(lResult);
+
+//   lResultgForm:= TForm.Create(Self);
+//   lResultgForm.Position:= poMainFormCenter;
+//   try
+//     var MemoTxt:= TMemo.Create(lResultgForm);
+//     MemoTxt.Parent := lResultgForm;
+//     MemoTxt.Align:= alClient;
+//     MemoTxt.Text:=  lResult;
+//     lResultgForm.ShowModal;
+//   finally
+//      lResultgForm.Free;
+//   end;
+
 end;
+
 
 end.

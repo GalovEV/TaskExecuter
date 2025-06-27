@@ -13,10 +13,7 @@ type
 
   TFileSearchTask = class(TTaskImplementation, ITaskWithConfig)
   private
-
-//    function GetFormResults(Form: TForm): TArray<TParamValue>;
   protected
-//  function DoCreateConfigForm(AOwner: TComponent): ITaskConfigForm; override;
   function DoExecute(const AParamValues: TArray<TParamValue>; ACallback: ITaskCallback): Boolean; override;
    // ITaskWithConfig
    protected
@@ -38,15 +35,7 @@ begin
   FTaskName:= 'Поиск файлов';
 
 // Параметры: маска, папка
-//  SetLength(FParams, 2);
-//  FParams[0].Name := 'Mask';
-//  FParams[0].Description := 'Маска файлов (например, *.txt)';
-//  FParams[0].ParamType := ptString;
-//  FParams[0].DefaultValue := '*.*';
-//  FParams[1].Name := 'Folder';
-//  FParams[1].Description := 'Папка для поиска';
-//  FParams[1].ParamType := ptFolder;
-//  FParams[1].DefaultValue := '';
+// своя форма параметров
 end;
 
 function TFileSearchTask.CreateConfigForm(AOwner: TComponent): ITaskConfigForm;
@@ -54,23 +43,12 @@ begin
   Result := TFileSearchConfigWrapper.Create(AOwner);
 end;
 
-//function TFileSearchTask.DoCreateConfigForm(AOwner: TComponent): ITaskConfigForm;
-//begin
-//  Result := TFileSearchConfigWrapper.Create(AOwner);
-//end;
-
-//function TFileSearchTask.CreateConfigForm(AOwner: TComponent): TForm;
-//begin
-//  Result := TfrmFileSearchConfig.Create(AOwner);
-//end;
-
 function TFileSearchTask.DoExecute(const AParamValues: TArray<TParamValue>;
   ACallback: ITaskCallback): Boolean;
 var
   Mask, Dir: string;
   Files: TStringDynArray;
   Total, Current: Integer;
-//  SL: TStringList;
 begin
   Result := true;
 
@@ -99,7 +77,6 @@ begin
     if FCanceled then Exit(False);
 
     Inc(Current);
-    Sleep(300);
     if Current mod 100 = 0 then
     begin
       ACallback.UpdateProgress(
@@ -124,14 +101,6 @@ begin
 
   ACallback.UpdateProgress(Format('Поиск завершен. Найдено файлов: %d', [Total]), 100, tsCompleted);
 end;
-
-//function TFileSearchTask.GetFormResults(Form: TForm): TArray<TParamValue>;
-//begin
-//  if Form is TfrmFileSearchConfig then
-//    Result := TfrmFileSearchConfig(Form).GetFormResults
-//  else
-//    raise Exception.Create('Invalid form type');
-//end;
 
 { TFileSearchConfigWrapper }
 
