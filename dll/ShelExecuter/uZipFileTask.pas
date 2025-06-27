@@ -62,7 +62,6 @@ begin
     raise Exception.CreateFmt('Директория не существует: %s', [lPathName]);
 
   lZipFileName:= '"' + cPathName + Copy(lPathName, LastDelimiter('\', lPathName) + 1, MaxInt) + '"';
-//  IncludeTrailingPathDelimiter(ExtractFileDir(lPathName)) + 'upload.zip';
 
   Result:= CreateZipFile(lZipFileName, '"' + lPathName + '"', lErrorString);
 
@@ -79,7 +78,6 @@ function TZipFileTask.CreateZipFile(AZipFileName: string; APathName: string; out
 var
  lArchiverFile: string;
  lCommandLine: string;
-// lErrorString: string;
  const
   cZipFileName = 'result.zip';
   c7ZipPath = '..\..\7ZIP\7za.exe';
@@ -103,14 +101,12 @@ begin
     lCommandLine := lArchiverFile + Format(c7ZipCommandLine, [AZipFileName, APathName]);
     if not RunCommandLineProc(lCommandLine, OErrorString) then
       Exit(False)
-//        raise Exception.Create(lErrorString)
   end
   else
   begin
     OErrorString := Format('7Zip Archiver not found (%s)', [lArchiverFile]);
     Exit(False)
   end;
-//     raise Exception.CreateFmt('7Zip Archiver not found (%s)', [lArchiverFile]);
 
 end;
 
