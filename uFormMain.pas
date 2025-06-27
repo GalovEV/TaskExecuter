@@ -13,8 +13,6 @@ type
     Panel1: TPanel;
     Splitter1: TSplitter;
     pLeft: TPanel;
-    pTop: TPanel;
-    edFilter: TEdit;
     Panel3: TPanel;
     lvExecuteTasks: TListView;
     ActionList: TActionList;
@@ -22,22 +20,7 @@ type
     actBreakReport: TAction;
     actAbout: TAction;
     actPreviewTaskLog: TAction;
-    actWorkParams: TAction;
     actRefresh: TAction;
-    actMoveUp: TAction;
-    actMoveDown: TAction;
-    ASaveToAllUsers: TAction;
-    ShowHelp: TAction;
-    pmTaskList: TPopupMenu;
-    N12: TMenuItem;
-    N13: TMenuItem;
-    N11: TMenuItem;
-    N4: TMenuItem;
-    N3: TMenuItem;
-    N1: TMenuItem;
-    N2: TMenuItem;
-    N6: TMenuItem;
-    N8: TMenuItem;
     ToolBar1: TToolBar;
     ToolButton9: TToolButton;
     tbStart: TToolButton;
@@ -52,6 +35,8 @@ type
     lvCompleted: TListView;
     btn1: TToolButton;
     tbOpenTaskLog: TToolButton;
+    tbResults: TToolButton;
+    actPreviewResult: TAction;
     procedure actRefreshUpdate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actRefreshExecute(Sender: TObject);
@@ -63,6 +48,8 @@ type
 
     procedure actPreviewTaskLogUpdate(Sender: TObject);
     procedure actPreviewTaskLogExecute(Sender: TObject);
+    procedure ToolBar1Click(Sender: TObject);
+    procedure actPreviewResultExecute(Sender: TObject);
   private
     { Private declarations }
     FTaskManager: TTaskManager;
@@ -70,9 +57,9 @@ type
     procedure RefreshTaskList;
     procedure StartTask(ATaskID: string);
     procedure StopTask(ATaskID: string);   
-    procedure OpenTaskLog(ATaskID: string); 
-//    procedure RefreshActiveTasks;
-//    procedure RefreshCompletedTasks;
+    procedure OpenTaskLog(ATaskID: string);
+    procedure OpenTaskResults(ATaskID: string);
+
   public
     { Public declarations }
     procedure TaskStarted(const ATaskID: string);
@@ -102,6 +89,12 @@ end;
 procedure TFormMain.actBreakReportUpdate(Sender: TObject);
 begin
   (Sender as TAction).Enabled:= Assigned(lvExecuteTasks.Selected);
+end;
+
+procedure TFormMain.actPreviewResultExecute(Sender: TObject);
+begin
+  if lvCompleted.Selected <> nil then
+    OpenTaskResults(lvCompleted.Selected.Caption);
 end;
 
 procedure TFormMain.actPreviewTaskLogExecute(Sender: TObject);
@@ -279,6 +272,11 @@ begin
     end;
 end;
 
+procedure TFormMain.ToolBar1Click(Sender: TObject);
+begin
+
+end;
+
 // Просмотр логов выполненной задачи
 procedure TFormMain.OpenTaskLog(ATaskID: string);
 begin
@@ -288,6 +286,11 @@ begin
     if Log <> nil then
       ShowMessage(Log.Text);
   end;
+end;
+
+procedure TFormMain.OpenTaskResults(ATaskID: string);
+begin
+   ShowMessage(FTaskManager.GetTaskResults(ATaskID));
 end;
 
 end.

@@ -37,8 +37,6 @@ uses
   //Интерфейсы для формы ввода парамтеров задачи в плагине
   ITaskConfigForm = interface
   ['{2055D146-A013-42D8-AA40-04CA4807AC32}']
-//    function ShowModal: Integer;
-//    function GetParams: TArray<TParamValue>;
     function ShowConfig(var VExecuteParam: TArray<TParamValue>): TExecuteResult;
   end;
   //интерфейс для задачи с формой парамтеров
@@ -49,7 +47,6 @@ uses
 
   // Функция регистрации задачи в DLL
   TRegisterTasksProc = procedure(ARegistry: ITaskRegistry); stdcall;
-
 
 //  TBreakException = class(Exception)
 //  strict private const

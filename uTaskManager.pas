@@ -47,7 +47,6 @@ type
     FCompletedTasks: TDictionary<string, ITask>;
     FDLLHandles: TList<HMODULE>;
     FTaskLogs: TDictionary<string, TStringList>;
-//    FDLLTasks: TDictionary<HMODULE, TList<string>>;
 
     FOnTaskStarted: TTaskEvent;
     FOnTaskUpdated: TProgressEvent;
@@ -79,6 +78,7 @@ type
     procedure RunTask(ATask: ITask; const AParams: array of TParamValue);
     procedure CancelTask(const ATaskID: string);
     function GetTaskLog(const ATaskID: string): TStringList;
+    function GetTaskResults(const ATaskID: string): string;
 
     property Tasks: TDictionary<string, ITask> read FTasks;
     property OnTaskStarted: TTaskEvent read FOnTaskStarted write FOnTaskStarted;
@@ -122,16 +122,14 @@ begin
 
   for var Thread in Threads do
   begin
-//    if not Thread.Finished then
-//    begin
-//      Thread.Terminate;
-//      Thread.WaitFor;
-//    end;
     Thread.Free;
   end;
 
-   FTasks.Clear;
-   FCompletedTasks.Clear;
+  // Очищаем словари
+  FTasks.Clear;
+  FCompletedTasks.Clear;
+  FActiveTasks.Clear;
+
   // Освобождаем ресурсы логов
   for var Log in FTaskLogs.Values do
     Log.Free;
@@ -142,45 +140,18 @@ begin
     FreeLibrary(Handle);
   FDLLHandles.Clear;
 
-  // Очищаем словари
-//  FTasks.Clear;
-  FActiveTasks.Clear;
-
-
   FreeAndNil(FTasks);
   FreeAndNil(FActiveTasks);
   FreeAndNil(FCompletedTasks);
   FreeAndNil(FTaskLogs);
   FreeAndNil(FDLLHandles);
 
-
-  // Освобождаем ресурсы
-//  for var Log in FTaskLogs.Values do
-//    Log.Free;
-
-//  FreeAndNil(FTasks);
-//  FreeAndNil(FActiveTasks);
-//  FreeAndNil(FCompletedTasks);
-
-//  for var DLLHandle in FDLLHandles do
-//    FreeLibrary(DLLHandle);
-//
-//  FreeAndNil(FDLLHandles);
-
-// Выгружаем все DLL в обратном порядке
-//  var Handles := FDLLHandles.ToArray;
-//  for var Handle in Handles do
-//      UnloadDLL(Handle);
-
-//  FreeAndNil(FTaskLogs);
-//
   OnTaskStarted := nil;
   OnTaskUpdated := nil;
   OnTaskCompleted := nil;
   OnTaskLogged := nil;
 
   inherited Destroy;
-
 end;
 
 destructor TTaskManager.Destroy;
@@ -193,7 +164,6 @@ procedure TTaskCallbackWrapper.LogMessage(const AMessage: string);
 var
   SL: TStringList;
 begin
- // FManager.LogMessage(Format('[%s] %s', [FTaskID, AMessage]));
   SL := TStringList.Create;
   try
     SL.Values[FTaskID] := AMessage;
@@ -219,8 +189,6 @@ begin
   finally
     SL.Free;
   end;
-//  FManager.UpdateProgress(APercent, Format('[%s] %s', [FTaskID, AMessage]));
-//  FManager.UpdateProgress(AMessage, APercent);
 end;
 
 { TTaskThread }
@@ -280,7 +248,6 @@ begin
   FDLLHandles := TList<HMODULE>.Create;
   FTaskLogs := TDictionary<string, TStringList>.Create;
 
- // FDLLTasks:= TDictionary<HMODULE, TList<string>>.Create;
 end;
 
 function TTaskManager.GenerateUniqueID: string;
@@ -311,7 +278,6 @@ begin
     if not Assigned(RegisterProc) then
       raise Exception.Create('DLL does not export RegisterTasks function');
 
-//    _AddRef;
     Proxy := TTaskRegistryProxy.Create(Self);
     try
       RegisterProc(Proxy); // Вызов функции регистрации в DLL
@@ -326,7 +292,6 @@ begin
        InnerLogMessage(Format('%s: %s', [AFileName, E.Message]));
        FreeLibrary(Handle);
      end;
-//    raise;
   end;
 
 end;
@@ -441,6 +406,15 @@ begin
     Result := nil;
 end;
 
+function TTaskManager.GetTaskResults(const ATaskID: string): string;
+var
+  lTask: ITask;
+begin
+  if not FCompletedTasks.TryGetValue(ATaskID, lTask) then
+    Exit('');
+  Result:= lTask.GetResult;
+end;
+
 { ITaskCallback implementation }
 
 procedure TTaskManager.LogMessage(const AMessage: string);
@@ -466,9 +440,6 @@ begin
       end;
     end);
 //
-//  var TaskLog := GetTaskLog(lTaskID);
-//  if Assigned(TaskLog) then
-//    TaskLog.Add(AMessage);
 end;
 
 procedure TTaskManager.UpdateProgress(const AMessage: string; APercent: Integer; ATaskStatus: TTaskStatus);
@@ -491,62 +462,6 @@ begin
       end;
     end);
 end;
-
-//procedure TTaskManager.UnloadDLL(Handle: HMODULE);
-//begin
-//
-//  if FDLLTasks.ContainsKey(Handle) then
-//  begin
-//
-//    var TaskIDs := FDLLTasks[Handle];
-//
-//    for var TaskID in TaskIDs do
-//
-//    begin
-//
-//// Удаляем задачу из всех списков
-//
-//      FTasks.Remove(TaskID);
-//
-//// Также, если задача активна, отменяем ее
-//
-//      if FActiveTasks.ContainsKey(TaskID) then
-//      begin
-//
-//        CancelTask(TaskID); // Это остановит задачу, если она выполняется
-//
-//        FActiveTasks.Remove(TaskID);
-//
-//      end;
-//
-//// Удаляем из завершенных? Наверное, нет, так как завершенные задачи хранятся для истории.
-//
-//// Но если мы хотим удалить даже из истории, то:
-//
-//      FCompletedTasks.Remove(TaskID);
-//
-//// И удалить логи
-//
-//      var Log := FTaskLogs[TaskID];
-//
-//      Log.Free;
-//
-//      FTaskLogs.Remove(TaskID);
-//
-//    end;
-//
-//    FDLLTasks.Remove(Handle);
-//
-//    TaskIDs.Free;
-//
-//  end;
-//
-//  FreeLibrary(Handle);
-//
-//  FDLLHandles.Remove(Handle);
-//
-//end;
-//
 
 { TTaskRegistryProxy }
 

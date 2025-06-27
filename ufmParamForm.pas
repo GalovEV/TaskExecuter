@@ -13,6 +13,7 @@ type
    class var FEditName: string;
    class procedure ButtonClickHandler(Sender: TObject);
   end;
+
   TFileButtonClickObj = class
    public
    class var FEditName: string;
@@ -31,17 +32,12 @@ type
     function CreateEditForParam(Param: TTaskParam; Top: Integer): TEdit;
     function CreateComboForParam(Param: TTaskParam; Top: Integer): TComboBox;
 
-//    procedure btnClickSelectPath(ASelf: Pointer; Sender: TObject);
-//    procedure onClickSelectPath(Sender: TObject);
   public
     { Public declarations }
     constructor Create(AOwner: TComponent; AParams: TArray<TTaskParam>); reintroduce;
     destructor Destroy; override;
     function GetParams: TArray<TParamValue>;
   end;
-
-//var
-//  fmParamForm: TfmParamForm;
 
 implementation
 
@@ -51,7 +47,6 @@ uses
 {$R *.dfm}
 
 { TfmParamForm }
-
 
 constructor TfmParamForm.Create(AOwner: TComponent; AParams: TArray<TTaskParam>);
 begin
@@ -77,8 +72,6 @@ end;
 
 function TfmParamForm.CreateEditForParam(Param: TTaskParam;
   Top: Integer): TEdit;
-//  var
-//   M: TMethod;
 begin
   Result := TEdit.Create(Self);
   Result.Parent := ScrollBox;
@@ -172,24 +165,6 @@ begin
 
 end;
 
-//procedure TfmParamForm.onClickSelectPath(Sender: TObject);
-//var
-//  Dir: string;
-//begin
-//  Dir := (Sender as TEdit).Text;
-//  if SelectDirectory('Select Directory', '', Dir) then
-//    (Sender as TEdit).Text := Dir;
-//
-//end;
-
-//procedure TfmParamForm.btnClickSelectPath(ASelf: Pointer; Sender: TObject);
-//var
-//  Dir: string;
-//begin
-//  Dir := TEdit(ASelf).Text;
-//  if SelectDirectory('Select Directory', '', Dir) then
-//    TEdit(ASelf).Text := Dir;
-//end;
 { TPathButtonClickObj }
 
 class procedure TPathButtonClickObj.ButtonClickHandler(Sender: TObject);

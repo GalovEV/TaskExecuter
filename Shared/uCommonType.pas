@@ -5,7 +5,6 @@ interface
   // Типы параметров задач
   TParamType = (ptString, ptInteger, ptBoolean, ptFolder, ptFile);
   TParamValue = Variant;
-  TParamValues = array of TParamValue;
 
  // Описание параметра задачи
   TTaskParam = record
