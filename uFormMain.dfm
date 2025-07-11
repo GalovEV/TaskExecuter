@@ -32,8 +32,8 @@ object FormMain: TFormMain
     Align = alClient
     BevelInner = bvLowered
     TabOrder = 0
-    ExplicitWidth = 1113
-    ExplicitHeight = 407
+    ExplicitWidth = 1115
+    ExplicitHeight = 415
     object Splitter1: TSplitter
       Left = 297
       Top = 2
@@ -49,6 +49,7 @@ object FormMain: TFormMain
       Height = 412
       Align = alLeft
       TabOrder = 0
+      ExplicitHeight = 411
       object lvTasks: TListView
         Left = 1
         Top = 1
@@ -71,6 +72,7 @@ object FormMain: TFormMain
         TabOrder = 0
         ViewStyle = vsReport
         OnDblClick = actStartReportExecute
+        ExplicitHeight = 409
       end
     end
     object Panel3: TPanel
@@ -81,9 +83,8 @@ object FormMain: TFormMain
       Align = alClient
       BevelInner = bvLowered
       TabOrder = 1
-      ExplicitLeft = 265
-      ExplicitWidth = 846
-      ExplicitHeight = 403
+      ExplicitWidth = 812
+      ExplicitHeight = 411
       object lvExecuteTasks: TListView
         Left = 2
         Top = 2
@@ -117,7 +118,6 @@ object FormMain: TFormMain
         RowSelect = True
         TabOrder = 0
         ViewStyle = vsReport
-        ExplicitWidth = 848
       end
       object lvCompleted: TListView
         Left = 2
@@ -153,7 +153,6 @@ object FormMain: TFormMain
         TabOrder = 1
         ViewStyle = vsReport
         OnDblClick = actPreviewTaskLogExecute
-        ExplicitWidth = 848
       end
     end
   end
@@ -176,7 +175,7 @@ object FormMain: TFormMain
     TabOrder = 1
     Transparent = True
     OnClick = ToolBar1Click
-    ExplicitWidth = 1113
+    ExplicitWidth = 1115
     object ToolButton9: TToolButton
       Left = 0
       Top = 0
@@ -231,8 +230,8 @@ object FormMain: TFormMain
     Height = 89
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 469
-    ExplicitWidth = 1113
+    ExplicitTop = 477
+    ExplicitWidth = 1115
   end
   object ActionList: TActionList
     Images = HotImages32x32

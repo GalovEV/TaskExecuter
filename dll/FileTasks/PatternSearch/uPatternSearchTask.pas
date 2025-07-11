@@ -72,28 +72,34 @@ begin
 
   if not FileExists(lFileName) then
     raise Exception.CreateFmt('Файл не существует: %s', [lFileName]);
-
-  SetLength(Patterns, Length(AParamValues) - 1);
-  for var I := 0 to High(Patterns) do
-    Patterns[I]:= AnsiString(AParamValues[I]);
+  try
+    try
+      SetLength(Patterns, Length(AParamValues) - 1);
+      for var I := 0 to High(Patterns) do
+        Patterns[I] := AnsiString(AParamValues[I]);
 
   // Поиск паттернов в  файле
-  ACallback.LogMessage(Format('Начало поиска в файле %s', [lFileName]));
+      ACallback.LogMessage(Format('Начало поиска в файле %s', [lFileName]));
 
-  if not FindPatternsInFile(Self, Patterns, lFileName, ACallback, lSearchResults) then
-    Exit(False);
+      if not FindPatternsInFile(Self, Patterns, lFileName, ACallback, lSearchResults) then
+        Exit(False);
+    finally
+//    SetLength(Patterns, 0);
+      Finalize(Patterns);
+    end;
 
-  FTaskResult:= '';
-  for var Res in lSearchResults do
-  begin
-    FTaskResult:= FTaskResult + Format('Pattern: %s. Count: %d. Positions: %s' ,
-    [Res.Pattern, Res.Count, GetPattarnPositions(Res.Positions)]);
+    FTaskResult := '';
+    for var Res in lSearchResults do
+    begin
+      FTaskResult := FTaskResult + Format('Pattern: %s. Count: %d. Positions: %s', [Res.Pattern, Res.Count, GetPattarnPositions(Res.Positions)]);
 
-    FTaskResult:= FTaskResult + #13;
+      FTaskResult := FTaskResult + #13;
+    end;
+    ACallback.UpdateProgress('Поиск завершен', 100, tsCompleted);
+    Sleep(200);
+  finally
+    Finalize(lSearchResults);
   end;
-  ACallback.UpdateProgress('Поиск завершен', 100, tsCompleted);
-  Sleep(200);
-
 end;
 
 end.

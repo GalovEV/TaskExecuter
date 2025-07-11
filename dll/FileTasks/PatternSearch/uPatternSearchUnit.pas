@@ -123,10 +123,12 @@ begin
     end;
   finally
     Stream.Free;
+    Finalize(Buffer);
   end;
 
   // Формирование результата
   SetLength(OSearchResults, Length(Patterns));
+
   for j := 0 to High(Patterns) do
   begin
     OSearchResults[j].Pattern := string(Patterns[j]);

@@ -30,6 +30,8 @@ uses
     function DoExecute(const AParamValues: TArray<TParamValue>; ACallback: ITaskCallback): Boolean; virtual; abstract;
   public
    property isCancel: Boolean read FCanceled;
+   procedure BeforeDestruction; override;
+   procedure AfterConstruction; override;
   end;
 
  //Âûחמג פמנלû ןאנאלעונמג
@@ -51,6 +53,20 @@ uses
      IOUtils;
 
 { TTaskImplementation }
+
+procedure TTaskImplementation.AfterConstruction;
+begin
+  inherited;
+
+end;
+
+procedure TTaskImplementation.BeforeDestruction;
+begin
+  Finalize(FParams);
+
+  inherited;
+
+end;
 
 procedure TTaskImplementation.Cancel;
 begin

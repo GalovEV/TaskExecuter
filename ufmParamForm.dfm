@@ -23,14 +23,13 @@ object fmParamForm: TfmParamForm
     BevelKind = bkFlat
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = -17
-    ExplicitTop = 166
-    ExplicitWidth = 645
+    ExplicitTop = 405
+    ExplicitWidth = 624
     DesignSize = (
       628
       34)
     object bbOK: TBitBtn
-      Left = 458
+      Left = 452
       Top = 4
       Width = 75
       Height = 25
@@ -40,9 +39,10 @@ object fmParamForm: TfmParamForm
       ModalResult = 1
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 448
     end
     object bbCancel: TBitBtn
-      Left = 539
+      Left = 533
       Top = 4
       Width = 75
       Height = 25
@@ -52,6 +52,7 @@ object fmParamForm: TfmParamForm
       ModalResult = 2
       NumGlyphs = 2
       TabOrder = 1
+      ExplicitLeft = 529
     end
   end
   object ScrollBox: TScrollBox
@@ -61,9 +62,7 @@ object fmParamForm: TfmParamForm
     Height = 406
     Align = alClient
     TabOrder = 1
-    ExplicitLeft = 192
-    ExplicitTop = 168
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitWidth = 624
+    ExplicitHeight = 405
   end
 end

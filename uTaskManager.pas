@@ -218,7 +218,7 @@ begin
         FCallback.UpdateProgress('Task canceled by user', -1, tsCanceled);
       end
     else
-     if ExecuteResult = erOk then
+   if ExecuteResult = erOk then
     begin
     // Уведомление о завершении через синхронизацию
       Synchronize(
